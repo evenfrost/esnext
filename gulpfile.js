@@ -25,7 +25,7 @@ var gulp = require('gulp'),
 
     isProduction = argv.production;
 
-gulp.task('scripts.dev', function () {
+gulp.task('scripts', function () {
   return gulp.src(paths.SRC_JS)
     .pipe(plumber())
     .pipe(changed(paths.DEST_JS))
@@ -33,12 +33,11 @@ gulp.task('scripts.dev', function () {
     .pipe(livereload());
 });
 
-gulp.task('scripts.prod', function () {
-  return gulp.src('')
-    .pipe(plumber())
-    // .pipe(jspm.bundleSFX('client/scripts/index', 'public/build.js'));
-    .pipe(shell('jspm bundle-sfx scripts/index ' + paths.BUILD_JS));
-});
+// gulp.task('scripts.prod', function () {
+//   return gulp.src('')
+//     .pipe(plumber())
+//     .pipe(shell('jspm bundle-sfx scripts/index ' + paths.BUILD_JS));
+// });
 
 /**
  * Styles.
@@ -46,14 +45,10 @@ gulp.task('scripts.prod', function () {
 gulp.task('styles', function () {
   return gulp.src(paths.SRC_CSS)
     .pipe(plumber())
-    // .pipe(changed(stylesPublicPath))
     .pipe(stylus({
       use: [nib()],
       import: ['nib'],
-      // compress: true,
-      // 'include css': true
     }))
-    // .pipe(rename('build.css'))
     .pipe(gulp.dest(paths.DEST_CSS))
     .pipe(livereload());
 });
@@ -100,5 +95,5 @@ gulp.task('dev', function () {
  * Default task.
  */
 gulp.task('default', function (callback) {
-  runSequence('clean', ['styles', 'scripts.dev'], 'dev', callback);
+  runSequence('clean', ['styles', 'scripts'], 'dev', callback);
 });
