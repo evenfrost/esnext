@@ -59,7 +59,7 @@ gulp.task('styles', function () {
 gulp.task('watch', function () {
   livereload.listen();
   gulp.watch(paths.SRC_CSS, { gaze: { maxListeners: 999 }}, ['styles']);
-  gulp.watch(paths.SRC_JS, { gaze: { maxListeners: 999 }}, ['scripts.dev']);
+  gulp.watch(paths.SRC_JS, { gaze: { maxListeners: 999 }}, ['scripts']);
 }); 
 
 /**
