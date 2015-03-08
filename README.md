@@ -9,7 +9,7 @@ Includes:
 ## Installation and Usage
 [io.js](https://iojs.org/en/index.html) is required for this boilerplate to run, as well as globally installed jspm and Gulp.
     
-    $ git clone git@github.com:evenfrost/plate.esnext.git
+    $ git clone git@github.com:evenfrost/esnext.git
     $ cd esnext
     $ npm install
     $ jspm install
