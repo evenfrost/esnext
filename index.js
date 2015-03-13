@@ -39,6 +39,10 @@ router.get('/config.js', function* (next) {
   yield send(this, path.join(__dirname, 'jspm.config.js'));
 });
 
+router.get('/test', function* (next) {
+  this.body = 'Hello, world';
+});
+
 // serve jspm packages
 router.get(/^\/packages\//, serve(path.join(__dirname, 'client')));
 
