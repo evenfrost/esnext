@@ -12,45 +12,72 @@ var gulp = require('gulp'),
     shell = require('gulp-shell'),
     gulpif = require('gulp-if'),
     lazypipe = require('lazypipe'),
+    concatCss = require('gulp-concat-css'),
+    minifyCss = require('gulp-minify-css'),
     argv = require('yargs').argv,
 
     paths = {
-      SRC_JS: 'client/scripts/**/*.js',
-      SRC_CSS: 'client/styles/**/*.styl',
-      DEST_JS: 'public/scripts',
-      DEST_CSS: 'public/styles',
-      BUILD_JS: 'public/build.js',
-      BUILD_CSS: 'public/build.css'
+      js: {
+        src: 'client/scripts/**/*.js',
+        dest: 'public/scripts',
+        build: 'public/bundle.js'
+      },
+      css: {
+        src: 'client/styles/**/*.styl',
+        dest: 'public/styles',
+        build: 'public'
+      }
     },
 
     production = argv.production;
 
+/**
+ * Scripts. Development workflow.
+ */
 gulp.task('scripts', function () {
-  return gulp.src(paths.SRC_JS)
+  return gulp.src(paths.js.src)
     .pipe(plumber())
-    .pipe(changed(paths.DEST_JS))
-    .pipe(gulp.dest(paths.DEST_JS))
+    .pipe(changed(paths.js.dest))
+    .pipe(gulp.dest(paths.js.dest))
     .pipe(livereload());
 });
 
-// gulp.task('scripts.prod', function () {
-//   return gulp.src('')
-//     .pipe(plumber())
-//     .pipe(shell('jspm bundle-sfx scripts/index ' + paths.BUILD_JS));
-// });
+/**
+ * Scripts. Production build.
+ */
+gulp.task('scripts.build', function () {
+  return gulp.src('')
+    .pipe(plumber())
+    .pipe(shell('jspm bundle-sfx scripts/index ' + paths.js.build));
+});
 
 /**
- * Styles.
+ * Styles. Development workflow.
  */
 gulp.task('styles', function () {
-  return gulp.src(paths.SRC_CSS)
+  return gulp.src(paths.css.src)
     .pipe(plumber())
     .pipe(stylus({
       use: [nib()],
       import: ['nib'],
     }))
-    .pipe(gulp.dest(paths.DEST_CSS))
+    .pipe(gulp.dest(paths.css.dest))
     .pipe(livereload());
+});
+
+/**
+ * Styles. Production build.
+ */
+gulp.task('styles.build', function () {
+  return gulp.src(paths.css.src)
+    .pipe(plumber())
+    .pipe(stylus({
+      use: [nib()],
+      import: ['nib'],
+    }))
+    .pipe(concatCss('bundle.css'))
+    .pipe(minifyCss())
+    .pipe(gulp.dest(paths.css.build));
 });
 
 /**
@@ -58,8 +85,8 @@ gulp.task('styles', function () {
  */
 gulp.task('watch', function () {
   livereload.listen();
-  gulp.watch(paths.SRC_CSS, { gaze: { maxListeners: 999 }}, ['styles']);
-  gulp.watch(paths.SRC_JS, { gaze: { maxListeners: 999 }}, ['scripts']);
+  gulp.watch(paths.css.src, { gaze: { maxListeners: 999 }}, ['styles']);
+  gulp.watch(paths.js.src, { gaze: { maxListeners: 999 }}, ['scripts']);
 }); 
 
 /**
@@ -67,10 +94,10 @@ gulp.task('watch', function () {
  */
 gulp.task('clean', function (cb) {
   del([
-    paths.BUILD_JS,
-    paths.BUILD_CSS,
-    paths.DEST_JS,
-    paths.DEST_CSS
+    paths.js.build,
+    paths.css.build,
+    paths.js.dest,
+    paths.css.dest
   ], cb);
 });
 
@@ -91,9 +118,13 @@ gulp.task('dev', function () {
     .on('change', ['watch']);
 });
 
+gulp.task('build', function (callback) {
+  runSequence('clean', ['scripts.build', 'styles.build'], callback);
+});
+
 /**
  * Default task.
  */
 gulp.task('default', function (callback) {
-  runSequence('clean', ['styles', 'scripts'], 'dev', callback);
+  runSequence('clean', ['scripts', 'styles'], 'dev', callback);
 });

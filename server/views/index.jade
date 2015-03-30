@@ -1,13 +1,11 @@
 doctype html
 head
   title test
-  link(href='/styles/index.css', rel='stylesheet')
+  each style in styles
+    link(href= style, rel='stylesheet')
 
 body
   main Hello, world
 
-  script(src='/packages/babel-polyfill.js')
-  script(src='/packages/system.js')
-  script(src='/config.js')
-  script.
-    System.import('scripts/index')
+  each script in scripts
+    script(src= script)

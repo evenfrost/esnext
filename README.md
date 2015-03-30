@@ -14,3 +14,7 @@ Includes:
     $ npm install
     $ jspm install
     $ gulp
+
+## Production workflow
+    $ gulp build
+    $ NODE_ENV=production node --harmony_arrow_functions index.js

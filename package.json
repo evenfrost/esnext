@@ -29,7 +29,9 @@
     "del": "^1.1.1",
     "gulp-babel": "^4.0.1",
     "gulp-changed": "^1.2.1",
+    "gulp-concat-css": "^2.2.0",
     "gulp-livereload": "^3.8.0",
+    "gulp-minify-css": "^1.0.0",
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.0.0",
     "gulp-rename": "^1.2.0",
@@ -51,6 +53,10 @@
       "github/fetch": "github:github/fetch@^0.7.0",
       "lodash": "npm:lodash@^3.3.0",
       "normalize.css": "github:necolas/normalize.css@^3.0.2"
+    },
+    "devDependencies": {
+      "babel": "npm:babel@^4.7.16",
+      "babel-runtime": "npm:babel-runtime@^4.7.16"
     }
   }
 }

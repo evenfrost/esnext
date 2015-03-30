@@ -31,7 +31,29 @@ app.use(views(path.join(__dirname, 'server/views'), {
 
 // index route
 router.get('/', function* () {
-  yield this.render('index');
+  let scripts = [],
+      styles = [];
+
+  console.log(app.env);
+  if (app.env === 'production') {
+    scripts.push('bundle.js');
+    styles.push('bundle.css');
+  } else {
+    scripts.push(
+      '/packages/system.js',
+      '/config.js',
+      '/scripts/loader.js'
+    );
+    styles.push(
+      '/styles/index.css'
+    );
+  }
+
+  yield this.render('index', {
+    scripts: scripts,
+    styles: styles
+  });
+
 });
 
 // serve jspm config file

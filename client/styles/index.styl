@@ -1,26 +1,13 @@
 @require '../packages/github/necolas/normalize.css@3.0.2/normalize.css'
 
-main
+html, body, main
   align-items center
+  color #444
   display flex
   flex-wrap wrap
+  font-weight 700
+  height 100vh
   justify-content center
   overflow hidden
-
-img
-  cursor pointer
-  flex 1 1 auto
-  max-height 320px
-  max-width 320px
-  object-fit cover
-  overflow visible
-  position relative
-  transform scale(1)
-  transition transform .2s ease, z-index 0s linear .1s
   width 100vw
-  z-index 0
-  
-  &:hover
-    transition transform .2s ease, z-index 0s linear 0s
-    transform scale(1.1)
-    z-index 1
+
