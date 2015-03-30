@@ -23,7 +23,7 @@ var gulp = require('gulp'),
       BUILD_CSS: 'public/build.css'
     },
 
-    isProduction = argv.production;
+    production = argv.production;
 
 gulp.task('scripts', function () {
   return gulp.src(paths.SRC_JS)
