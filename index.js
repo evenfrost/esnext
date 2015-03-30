@@ -34,7 +34,6 @@ router.get('/', function* () {
   let scripts = [],
       styles = [];
 
-  console.log(app.env);
   if (app.env === 'production') {
     scripts.push('bundle.js');
     styles.push('bundle.css');
