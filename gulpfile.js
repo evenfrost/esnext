@@ -109,13 +109,10 @@ gulp.task('dev', function () {
     script: 'index.js',
     ext: 'js jade',
     ignore: ['client/**', 'public/**'],
-    nodeArgs: ['--harmony_arrow_functions'],
     execMap: {
-      'js': 'iojs'
+      'js': 'iojs --harmony_arrow_functions'
     }
-  })
-    .on('start', ['watch'])
-    .on('change', ['watch']);
+  });
 });
 
 gulp.task('build', function (callback) {
@@ -126,5 +123,5 @@ gulp.task('build', function (callback) {
  * Default task.
  */
 gulp.task('default', function (callback) {
-  runSequence('clean', ['scripts', 'styles'], 'dev', callback);
+  runSequence('clean', ['scripts', 'styles'], 'watch', 'dev', callback);
 });
