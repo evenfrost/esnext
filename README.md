@@ -4,10 +4,11 @@ Includes:
 * [Jade](http://jade-lang.com/)
 * [Stylus](http://learnboost.github.io/stylus/)
 * [Gulp](http://gulpjs.com/)
+* [Babel](https://babeljs.io/)
 * [jspm](http://jspm.io/)
 
 ## Installation and Usage
-[io.js](https://iojs.org/en/index.html) is required for this boilerplate to run, as well as globally installed jspm and Gulp.
+[io.js](https://iojs.org/en/index.html) is required for this boilerplate to run, as well as globally installed jspm, Gulp and Babel comiler.
     
     $ git clone git@github.com:evenfrost/esnext.git
     $ cd esnext
@@ -17,4 +18,4 @@ Includes:
 
 ## Production workflow
     $ gulp build
-    $ NODE_ENV=production node --harmony_arrow_functions index.js
+    $ NODE_ENV=production iojs build/index.js
