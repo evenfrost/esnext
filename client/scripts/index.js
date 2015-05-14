@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import window from 'github/fetch';
+import 'github/fetch';
 
 fetch('/test')
   .then(res => res.text())
