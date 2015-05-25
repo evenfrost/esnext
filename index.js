@@ -1,19 +1,20 @@
 'use strict';
 
-let fs = require('fs'),
-    path = require('path'),
-    koa = require('koa'),
-    serve = require('koa-static'),
-    views = require('koa-views'),
-    logger = require('koa-logger'),
-    conditional = require('koa-conditional-get'),
-    etag = require('koa-etag'),
-    error = require('koa-error'),
-    body = require('koa-body'),
-    methodOverride = require('koa-methodoverride'),
-    send = require('koa-send'),
-    router = require('koa-router')(),
-    app = koa();
+import fs from 'fs';
+import path from 'path';
+import koa from 'koa';
+import serve from 'koa-static';
+import views from 'koa-views';
+import logger from 'koa-logger';
+import conditional from 'koa-conditional-get';
+import etag from 'koa-etag';
+import error from 'koa-error';
+import body from 'koa-body';
+import methodOverride from 'koa-methodoverride';
+import send from 'koa-send';
+
+const router = require('koa-router')();
+const app = koa();
 
 app
   .use(body())
@@ -31,8 +32,8 @@ app.use(views(path.join(__dirname, 'server/views'), {
 
 // index route
 router.get('/', function* () {
-  let scripts = [],
-      styles = [];
+  let scripts = [];
+  let styles = [];
 
   if (app.env === 'production') {
     scripts.push('bundle.js');
