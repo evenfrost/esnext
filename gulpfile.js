@@ -35,7 +35,15 @@ const gulp = require('gulp'),
           build: 'build',
           views: 'server/views'
         }
-      };
+      },
+      // do not transpile stable V8 ES.next features
+      babelBlacklist = [
+        'es6.blockScoping',
+        'es6.constants',
+        'es6.forOf',
+        'es6.templateLiterals',
+        'regenerator'
+      ];
 
 /**
  * Server scripts. Production build.
@@ -53,13 +61,7 @@ gulp.task('scripts.server:build', function () {
     .pipe(plumber())
     .pipe(filter)
     .pipe(babel({
-      blacklist: [
-        'es6.blockScoping',
-        'es6.constants',
-        'es6.forOf',
-        'es6.templateLiterals',
-        'regenerator'
-      ]
+      blacklist: babelBlacklist
     }))
     .pipe(filter.restore())
     .pipe(gulp.dest(paths.server.build));
@@ -145,7 +147,7 @@ gulp.task('dev', function () {
     ext: 'js jade',
     ignore: ['client/**', 'public/**'],
     execMap: {
-      'js': 'babel-node'
+      'js': 'babel-node --blacklist ' + babelBlacklist.join(',')
     }
   });
 });
