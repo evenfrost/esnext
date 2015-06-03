@@ -12,6 +12,7 @@ import error from 'koa-error';
 import body from 'koa-body';
 import methodOverride from 'koa-methodoverride';
 import send from 'koa-send';
+import mount from 'koa-mount';
 
 const router = require('koa-router')();
 const app = koa();
@@ -23,7 +24,8 @@ app
   .use(conditional())
   .use(etag())
   .use(error())
-  .use(serve(path.join(__dirname, 'public')));
+  .use(serve(path.join(__dirname, 'public')))
+  .use(mount('/packages', serve(path.join(__dirname, 'jspm_packages'))));
 
 // Jade templates
 app.use(views(path.join(__dirname, 'server/views'), {
@@ -66,7 +68,8 @@ router.get('/test', function* (next) {
 });
 
 // serve jspm packages
-router.get(/^\/packages\//, serve(path.join(__dirname, 'client')));
+// router.get(/^\/packages\//, serve(path.join(__dirname, 'jspm_packages')));
+
 
 // use router
 app

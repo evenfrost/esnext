@@ -1,5 +1,4 @@
 System.config({
-  "baseURL": "/",
   "transpiler": "babel",
   "babelOptions": {
     "optional": [
@@ -8,8 +7,8 @@ System.config({
   },
   "paths": {
     "*": "*.js",
-    "github:*": "packages/github/*.js",
-    "npm:*": "packages/npm/*.js"
+    "github:*": "../jspm_packages/github/*.js",
+    "npm:*": "../jspm_packages/npm/*.js"
   }
 });
 
@@ -18,7 +17,6 @@ System.config({
     "babel": "npm:babel-core@5.4.7",
     "babel-runtime": "npm:babel-runtime@5.4.7",
     "core-js": "npm:core-js@0.9.13",
-    "github/fetch": "github:github/fetch@0.7.0",
     "lodash": "npm:lodash@3.9.3",
     "normalize.css": "github:necolas/normalize.css@3.0.3",
     "github:jspm/nodelibs-assert@0.1.0": {
@@ -75,9 +73,6 @@ System.config({
     },
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
-    },
-    "npm:babel-runtime@4.7.16": {
-      "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:buffer@3.2.2": {
       "base64-js": "npm:base64-js@0.0.8",
