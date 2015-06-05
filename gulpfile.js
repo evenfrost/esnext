@@ -49,7 +49,7 @@ const gulp = require('gulp'),
  * Server scripts. Production build.
  *
  * Builds all server files under 'server' directory
- * intro 'build/server' directory, running them through
+ * into 'build/server' directory, running them through
  * Babel and excluding Jade views.
  * While running through Babel, excludes
  * stable V8 esnext options that are shipped in io.js.
