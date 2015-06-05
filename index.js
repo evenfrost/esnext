@@ -12,6 +12,7 @@ import error from 'koa-error';
 import body from 'koa-body';
 import methodOverride from 'koa-methodoverride';
 import send from 'koa-send';
+import mount from 'koa-mount';
 
 const router = require('koa-router')();
 const app = koa();
@@ -23,7 +24,8 @@ app
   .use(conditional())
   .use(etag())
   .use(error())
-  .use(serve(path.join(__dirname, 'public')));
+  .use(serve(path.join(__dirname, 'public')))
+  .use(mount('/jspm_packages', serve(path.join(__dirname, 'client/jspm_packages'))));
 
 // Jade templates
 app.use(views(path.join(__dirname, 'server/views'), {
@@ -40,7 +42,7 @@ router.get('/', function* () {
     styles.push('bundle.css');
   } else {
     scripts.push(
-      '/packages/system.js',
+      '/jspm_packages/system.js',
       '/config.js',
       '/scripts/loader.js'
     );
@@ -58,7 +60,7 @@ router.get('/', function* () {
 
 // serve jspm config file
 router.get('/config.js', function* (next) {
-  yield send(this, path.join(__dirname, 'jspm.config.js'));
+  yield send(this, path.join(__dirname, 'client/config.js'));
 });
 
 router.get('/test', function* (next) {
@@ -66,7 +68,8 @@ router.get('/test', function* (next) {
 });
 
 // serve jspm packages
-router.get(/^\/packages\//, serve(path.join(__dirname, 'client')));
+// router.get(/^\/packages\//, serve(path.join(__dirname, 'jspm_packages')));
+
 
 // use router
 app

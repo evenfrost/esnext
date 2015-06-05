@@ -1,3 +1,4 @@
 node_modules
 public/*
-client/packages/*
+client/jspm_packages
+build/*

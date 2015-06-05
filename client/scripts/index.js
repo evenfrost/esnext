@@ -1,8 +1,4 @@
 'use strict';
+'format es6';
 
-import _ from 'lodash';
-import 'github/fetch';
-
-fetch('/test')
-  .then(res => res.text())
-  .then(text => console.log(text));
+[1, 2, 3].forEach(n => console.log(n));
