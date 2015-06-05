@@ -25,7 +25,7 @@ app
   .use(etag())
   .use(error())
   .use(serve(path.join(__dirname, 'public')))
-  .use(mount('/packages', serve(path.join(__dirname, 'jspm_packages'))));
+  .use(mount('/jspm_packages', serve(path.join(__dirname, 'client/jspm_packages'))));
 
 // Jade templates
 app.use(views(path.join(__dirname, 'server/views'), {
@@ -42,7 +42,7 @@ router.get('/', function* () {
     styles.push('bundle.css');
   } else {
     scripts.push(
-      '/packages/system.js',
+      '/jspm_packages/system.js',
       '/config.js',
       '/scripts/loader.js'
     );
@@ -60,7 +60,7 @@ router.get('/', function* () {
 
 // serve jspm config file
 router.get('/config.js', function* (next) {
-  yield send(this, path.join(__dirname, 'jspm.config.js'));
+  yield send(this, path.join(__dirname, 'client/config.js'));
 });
 
 router.get('/test', function* (next) {
