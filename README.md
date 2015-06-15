@@ -8,7 +8,7 @@ Includes:
 * [jspm](http://jspm.io/)
 
 ## Installation and Usage
-[io.js](https://iojs.org/en/index.html) is required for this boilerplate to run, as well as globally installed jspm, Gulp and Babel compiler.
+[io.js](https://iojs.org/en/index.html) is required for this boilerplate to run, as well as globally installed jspm, Gulp and Babel.
     
     $ git clone git@github.com:evenfrost/esnext.git
     $ cd esnext
@@ -23,4 +23,4 @@ On client, everything is managed by jspm. ([See jspm wiki](https://github.com/js
     $ gulp build
     $ NODE_ENV=production iojs build/index.js
 
-All scripts are built in `build` folder, preserving the abovementioned stable/unstable logic, with client scripts and styles bundled in single file accordingly.
+All scripts are built in `build` folder, preserving the abovementioned stable/unstable logic, with client scripts and styles bundled accordingly in separate files.
