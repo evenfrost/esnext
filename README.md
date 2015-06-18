@@ -16,8 +16,8 @@ Includes:
     $ jspm install
     $ gulp
 
-In development mode, on server unstable V8 ES.next features are transpiled at runtime with `babel-node`, while stable (e.g. generators) are handled by io.js itself.
-On client, everything is managed by jspm. ([See jspm wiki](https://github.com/jspm/jspm-cli/wiki)) 
+While in development mode, on server unstable V8 ES.next features are transpiled at runtime with `babel-node`, while stable (e.g. generators) are handled by io.js itself.
+On client everything is managed by jspm. ([See jspm wiki.](https://github.com/jspm/jspm-cli/wiki)) 
 
 ## Production workflow
     $ gulp build
