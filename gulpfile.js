@@ -22,6 +22,7 @@ const paths = {
   build: 'build',
   js: {
     src: 'client/scripts/**/*.js',
+    index: 'client/scripts/index',
     dest: 'public/scripts',
     build: 'build/public/bundle.js'
   },
@@ -85,7 +86,7 @@ gulp.task('scripts.client:dev', function () {
 gulp.task('scripts.client:build', function () {
   return gulp.src('')
     .pipe(plumber())
-    .pipe(shell('jspm bundle-sfx --minify scripts/index ' + paths.js.build));
+    .pipe(shell('jspm bundle-sfx --minify ' + paths.js.index + ' ' + paths.js.build));
 });
 
 /**
