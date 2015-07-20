@@ -1,49 +1,50 @@
 'use strict';
 
-const gulp = require('gulp'),
-      changed = require('gulp-changed'),
-      stylus = require('gulp-stylus'),
-      nib = require('nib'),
-      nodemon = require('gulp-nodemon'),
-      livereload = require('gulp-livereload'),
-      plumber = require('gulp-plumber'),
-      runSequence = require('run-sequence'),
-      del = require('del'),
-      rename = require('gulp-rename'),
-      shell = require('gulp-shell'),
-      gulpif = require('gulp-if'),
-      gulpFilter = require('gulp-filter'),
-      babel = require('gulp-babel'),
-      concatCss = require('gulp-concat-css'),
-      minifyCss = require('gulp-minify-css'),
+const gulp = require('gulp');
+const changed = require('gulp-changed');
+const stylus = require('gulp-stylus');
+const nib = require('nib');
+const nodemon = require('gulp-nodemon');
+const livereload = require('gulp-livereload');
+const plumber = require('gulp-plumber');
+const runSequence = require('run-sequence');
+const del = require('del');
+const rename = require('gulp-rename');
+const shell = require('gulp-shell');
+const gulpif = require('gulp-if');
+const gulpFilter = require('gulp-filter');
+const babel = require('gulp-babel');
+const concatCss = require('gulp-concat-css');
+const minifyCss = require('gulp-minify-css');
 
-      paths = {
-        index: 'index.js',
-        build: 'build',
-        js: {
-          src: 'client/scripts/**/*.js',
-          dest: 'public/scripts',
-          build: 'build/public/bundle.js'
-        },
-        css: {
-          src: 'client/styles/**/*.styl',
-          dest: 'public/styles',
-          build: 'build/public'
-        },
-        server: {
-          src: 'server/**',
-          build: 'build',
-          views: 'server/views'
-        }
-      },
-      // do not transpile stable V8 ES.next features
-      babelBlacklist = [
-        'es6.blockScoping',
-        'es6.constants',
-        'es6.forOf',
-        'es6.templateLiterals',
-        'regenerator'
-      ];
+const paths = {
+  index: 'index.js',
+  build: 'build',
+  js: {
+    src: 'client/scripts/**/*.js',
+    dest: 'public/scripts',
+    build: 'build/public/bundle.js'
+  },
+  css: {
+    src: 'client/styles/**/*.styl',
+    dest: 'public/styles',
+    build: 'build/public'
+  },
+  server: {
+    src: 'server/**',
+    build: 'build',
+    views: 'server/views'
+  }
+};
+
+// do not transpile stable V8 ES.next features
+const babelBlacklist = [
+  'es6.blockScoping',
+  'es6.constants',
+  'es6.forOf',
+  'es6.templateLiterals',
+  'regenerator'
+];
 
 /**
  * Server scripts. Production build.

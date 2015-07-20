@@ -44,9 +44,8 @@
   "author": "evenfrost",
   "license": "MIT",
   "jspm": {
-    "directories": {
-      "baseURL": "client"
-    },
+    "directories": {},
+    "configFile": "jspm.config.js",
     "dependencies": {},
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",
