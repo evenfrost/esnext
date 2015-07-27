@@ -51,10 +51,7 @@ router.get('/', function* () {
     );
   }
 
-  yield this.render('index', {
-    scripts: scripts,
-    styles: styles
-  });
+  yield this.render('index', { scripts, styles });
 
 });
 
