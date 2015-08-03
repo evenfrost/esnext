@@ -34,7 +34,7 @@ app.use(views(path.join(__dirname, 'server/views'), {
 
 // index route
 router.get('/', function* () {
-  yield this.render('index', { scripts, styles });
+  yield this.render('index');
 });
 
 // serve jspm configuration file
