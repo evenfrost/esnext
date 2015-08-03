@@ -34,25 +34,7 @@ app.use(views(path.join(__dirname, 'server/views'), {
 
 // index route
 router.get('/', function* () {
-  let scripts = [];
-  let styles = [];
-
-  if (app.env === 'production') {
-    scripts.push('bundle.js');
-    styles.push('bundle.css');
-  } else {
-    scripts.push(
-      '/jspm_packages/system.js',
-      '/config.js',
-      '/scripts/loader.js'
-    );
-    styles.push(
-      '/styles/index.css'
-    );
-  }
-
   yield this.render('index', { scripts, styles });
-
 });
 
 // serve jspm configuration file
@@ -65,4 +47,16 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.listen(4000);
+app.use(function *(next) {
+  try {
+    yield next;
+  } catch (err) {
+    this.app.emit('error', err, this);
+  }
+});
+
+app.on('error', function (err) {
+  console.error(err.stack);
+});
+
+app.listen(process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 4000));

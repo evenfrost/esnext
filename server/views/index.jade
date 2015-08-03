@@ -1,11 +1,18 @@
 doctype html
 head
   title test
-  each style in styles
-    link(href= style, rel='stylesheet')
+
+  if process.env.NODE_ENV === 'production'
+    link(href='/bundle.css', rel='stylesheet')
+  else
+    link(href='/styles/index.css', rel='stylesheet')
 
 body
   main Hello, world
 
-  each script in scripts
-    script(src= script)
+  if process.env.NODE_ENV === 'production'
+    script(src='/bundle.js')
+  else
+    script(src='/jspm_packages/system.js')
+    script(src='/config.js')
+    script(src='/scripts/loader.js')

@@ -13,22 +13,34 @@ const rename = require('gulp-rename');
 const shell = require('gulp-shell');
 const gulpif = require('gulp-if');
 const gulpFilter = require('gulp-filter');
+const watch = require('gulp-watch');
 const babel = require('gulp-babel');
 const concatCss = require('gulp-concat-css');
 const minifyCss = require('gulp-minify-css');
 
 const paths = {
   index: 'index.js',
+  private: 'private/**/*',
   build: 'build',
   js: {
-    src: 'client/scripts/**/*.js',
+    src: 'client/**/*.js',
     index: 'client/scripts/index',
-    dest: 'public/scripts',
+    dest: 'public',
     build: 'build/public/bundle.js'
   },
   css: {
     src: 'client/styles/**/*.styl',
     dest: 'public/styles',
+    build: 'build/public'
+  },
+  images: {
+    src: 'client/images/**/*',
+    dest: 'public/images',
+    build: 'build/public/images'
+  },
+  rootAssets: {
+    src: 'client/root/**/*',
+    dest: 'public',
     build: 'build/public'
   },
   server: {
@@ -59,7 +71,7 @@ const babelBlacklist = [
 gulp.task('scripts.server:build', function () {
   let filter = gulpFilter('**/*.js');
 
-  return gulp.src([paths.server.src, paths.index], { base: './' })
+  return gulp.src([paths.server.src, paths.index, paths.private], { base: './' })
     .pipe(plumber())
     .pipe(filter)
     .pipe(babel({
@@ -119,12 +131,54 @@ gulp.task('styles:build', function () {
 });
 
 /**
+ * Images. Development workflow.
+ */
+gulp.task('images:dev', function () {
+  return gulp.src(paths.images.src)
+    .pipe(plumber())
+    .pipe(gulp.dest(paths.images.dest));
+});
+
+/**
+ * Images. Production build.
+ */
+gulp.task('images:build', function () {
+  return gulp.src(paths.images.src)
+    .pipe(gulp.dest(paths.images.build));
+});
+
+/**
+ * Root assets.
+ */
+gulp.task('rootAssets:dev', function () {
+  return gulp.src(paths.rootAssets.src)
+    .pipe(plumber())
+    .pipe(gulp.dest(paths.rootAssets.dest));
+});
+
+gulp.task('rootAssets:build', function () {
+  return gulp.src(paths.rootAssets.src)
+    .pipe(gulp.dest(paths.rootAssets.build));
+});
+
+/**
  * Watchers.
  */
 gulp.task('watch', function () {
   livereload.listen();
-  gulp.watch(paths.css.src, { gaze: { maxListeners: 999 }}, ['styles:dev']);
-  gulp.watch(paths.js.src, { gaze: { maxListeners: 999 }}, ['scripts.client:dev']);
+  
+  watch(paths.css.src, function () {
+    gulp.start('styles:dev');
+  });
+  watch(paths.js.src, function () {
+    gulp.start('scripts.client:dev');
+  });
+  watch(paths.images.src, function () {
+    gulp.start('images:dev');
+  });
+  watch(paths.rootAssets.src, function () {
+    gulp.start('rootAssets');
+  });
 }); 
 
 /**
@@ -133,10 +187,9 @@ gulp.task('watch', function () {
 gulp.task('clean', function (cb) {
   del([
     paths.build + '/**/*',
-    // paths.js.build,
-    // paths.css.build,
-    paths.js.dest,
-    paths.css.dest
+    'public/scripts',
+    'public/styles',
+    'public/images'
   ], cb);
 });
 
@@ -154,13 +207,16 @@ gulp.task('dev', function () {
   });
 });
 
-gulp.task('build', function (callback) {
-  runSequence('clean', ['scripts.server:build', 'scripts.client:build', 'styles:build'], callback);
-});
-
 /**
  * Default task.
  */
 gulp.task('default', function (callback) {
-  runSequence('clean', ['scripts.client:dev', 'styles:dev'], 'watch', 'dev', callback);
+  runSequence('clean', ['scripts.client:dev', 'styles:dev', 'images:dev', 'rootAssets:dev'], 'watch', 'dev', callback);
+});
+
+/**
+ * Build task.
+ */
+gulp.task('build', function (callback) {
+  runSequence('clean', ['scripts.server:build', 'scripts.client:build', 'styles:build', 'images:build', 'rootAssets:build'], callback);
 });
