@@ -5,7 +5,6 @@ const changed = require('gulp-changed');
 const stylus = require('gulp-stylus');
 const nib = require('nib');
 const nodemon = require('gulp-nodemon');
-const livereload = require('gulp-livereload');
 const plumber = require('gulp-plumber');
 const runSequence = require('run-sequence');
 const del = require('del');
@@ -15,6 +14,7 @@ const gulpif = require('gulp-if');
 const gulpFilter = require('gulp-filter');
 const watch = require('gulp-watch');
 const babel = require('gulp-babel');
+const browserSync = require('browser-sync').create();
 const concatCss = require('gulp-concat-css');
 const minifyCss = require('gulp-minify-css');
 
@@ -89,7 +89,7 @@ gulp.task('scripts.client:dev', function () {
     .pipe(plumber())
     .pipe(changed(paths.js.dest))
     .pipe(gulp.dest(paths.js.dest))
-    .pipe(livereload());
+    .pipe(browserSync.stream());
 });
 
 /**
@@ -112,7 +112,7 @@ gulp.task('styles:dev', function () {
       import: ['nib'],
     }))
     .pipe(gulp.dest(paths.css.dest))
-    .pipe(livereload());
+    .pipe(browserSync.stream());
 });
 
 /**
@@ -165,8 +165,6 @@ gulp.task('rootAssets:build', function () {
  * Watchers.
  */
 gulp.task('watch', function () {
-  livereload.listen();
-  
   watch(paths.css.src, function () {
     gulp.start('styles:dev');
   });
@@ -196,14 +194,39 @@ gulp.task('clean', function (cb) {
 /**
  * Development helpers.
  */
-gulp.task('dev', function () {
-  nodemon({
+gulp.task('nodemon', function (cb) {
+  let called = false;
+  let delay = 1000;
+
+  return nodemon({
     script: 'index.js',
     ext: 'js jade',
     ignore: ['client/**', 'public/**'],
     execMap: {
       'js': 'babel-node --blacklist ' + babelBlacklist.join(',')
     }
+  })
+  .on('start', function onStart() {
+    if (!called) {
+      setTimeout(cb, delay);
+      called = true;
+    }
+  })
+  .on('restart', function () {
+    setTimeout(function () {
+      browserSync.reload({ stream: false });
+    }, delay);
+  });
+
+});
+
+gulp.task('sync', ['nodemon'], function () {
+  browserSync.init({
+    files: ['public/**/*'],
+    proxy: 'localhost:3000',
+    port: 4000,
+    browser: 'google-chrome',
+    notify: false
   });
 });
 
@@ -211,7 +234,7 @@ gulp.task('dev', function () {
  * Default task.
  */
 gulp.task('default', function (callback) {
-  runSequence('clean', ['scripts.client:dev', 'styles:dev', 'images:dev', 'rootAssets:dev'], 'watch', 'dev', callback);
+  runSequence('clean', ['scripts.client:dev', 'styles:dev', 'images:dev', 'rootAssets:dev'], 'watch', 'sync', callback);
 });
 
 /**

@@ -59,4 +59,4 @@ app.on('error', function (err) {
   console.error(err.stack);
 });
 
-app.listen(process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 4000));
+app.listen(process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 3000));
