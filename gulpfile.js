@@ -59,6 +59,8 @@ const babelBlacklist = [
   'regenerator'
 ];
 
+const BROWSERSYNC_DELAY = 1000;
+
 /**
  * Server scripts. Production build.
  *
@@ -196,7 +198,6 @@ gulp.task('clean', function (cb) {
  */
 gulp.task('nodemon', function (cb) {
   let called = false;
-  let delay = 1000;
 
   return nodemon({
     script: 'index.js',
@@ -208,14 +209,14 @@ gulp.task('nodemon', function (cb) {
   })
   .on('start', function onStart() {
     if (!called) {
-      setTimeout(cb, delay);
+      setTimeout(cb, BROWSERSYNC_DELAY);
       called = true;
     }
   })
   .on('restart', function () {
     setTimeout(function () {
       browserSync.reload({ stream: false });
-    }, delay);
+    }, BROWSERSYNC_DELAY);
   });
 
 });
