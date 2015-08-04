@@ -207,7 +207,7 @@ gulp.task('nodemon', function (cb) {
       'js': 'babel-node --blacklist ' + babelBlacklist.join(',')
     }
   })
-  .on('start', function onStart() {
+  .on('start', function () {
     if (!called) {
       setTimeout(cb, BROWSERSYNC_DELAY);
       called = true;
