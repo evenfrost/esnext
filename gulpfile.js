@@ -24,7 +24,7 @@ const paths = {
   build: 'build',
   js: {
     src: 'client/**/*.js',
-    index: 'client/scripts/index',
+    index: 'client/scripts/index.js',
     dest: 'public',
     build: 'build/public/bundle.js'
   },
@@ -71,7 +71,7 @@ const BROWSERSYNC_DELAY = 1000;
  * stable V8 esnext options that are shipped in io.js.
  */
 gulp.task('scripts.server:build', function () {
-  let filter = gulpFilter('**/*.js');
+  let filter = gulpFilter('**/*.js', { restore: true });
 
   return gulp.src([paths.server.src, paths.index, paths.private], { base: './' })
     .pipe(plumber())
@@ -79,7 +79,7 @@ gulp.task('scripts.server:build', function () {
     .pipe(babel({
       blacklist: babelBlacklist
     }))
-    .pipe(filter.restore())
+    .pipe(filter.restore)
     .pipe(gulp.dest(paths.server.build));
 });
 
