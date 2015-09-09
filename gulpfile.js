@@ -56,6 +56,8 @@ const babelBlacklist = [
   'es6.constants',
   'es6.forOf',
   'es6.templateLiterals',
+  'es6.arrowFunctions',
+  'es6.classes',
   'regenerator'
 ];
 
