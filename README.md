@@ -8,7 +8,7 @@ Includes:
 * [jspm](http://jspm.io/)
 
 ## Installation and Usage
-[io.js](https://iojs.org/en/index.html) is required for this boilerplate to run, as well as globally installed jspm, Gulp and Babel.
+Node.js 4.0.0 or higher is required for this boilerplate to run, as well as globally installed jspm, Gulp and Babel.
     
     $ git clone git@github.com:evenfrost/esnext.git
     $ cd esnext
@@ -16,11 +16,11 @@ Includes:
     $ jspm install
     $ gulp
 
-While in development mode, on server unstable V8 ES.next features are transpiled at runtime with `babel-node`, while stable (e.g. generators) are handled by io.js itself.
+While in development mode, on server unstable V8 ES.next features are transpiled at runtime with `babel-node`, while stable (e.g. generators) are handled by Node.js itself.
 On client everything is managed by jspm. ([See jspm wiki.](https://github.com/jspm/jspm-cli/wiki)) 
 
 ## Production workflow
     $ gulp build
-    $ NODE_ENV=production iojs build/index.js
+    $ NODE_ENV=production node build/index.js
 
-All scripts are built in `build` folder, preserving the abovementioned stable/unstable logic, with client scripts and styles bundled accordingly in separate files.
+All processed files are placed in `build` folder, preserving the abovementioned stable/unstable logic, with client scripts and styles bundled respectively in separate files.
