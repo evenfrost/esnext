@@ -1,11 +1,11 @@
 ## Description
 Includes:
 * [Koa](http://koajs.com/)
+* [jspm](http://jspm.io/)
+* [Babel](https://babeljs.io/)
+* [Gulp](http://gulpjs.com/)
 * [Jade](http://jade-lang.com/)
 * [Stylus](http://learnboost.github.io/stylus/)
-* [Gulp](http://gulpjs.com/)
-* [Babel](https://babeljs.io/)
-* [jspm](http://jspm.io/)
 
 ## Installation and Usage
 Node.js 4.0.0 or higher is required for this boilerplate to run, as well as globally installed jspm, Gulp and Babel.
