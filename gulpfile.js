@@ -192,7 +192,9 @@ gulp.task('clean', function (cb) {
     'public/scripts',
     'public/styles',
     'public/images'
-  ], cb);
+  ]).then(function () {
+    cb();
+  });
 });
 
 /**
