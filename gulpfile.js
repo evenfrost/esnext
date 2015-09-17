@@ -72,7 +72,7 @@ const BROWSERSYNC_DELAY = 1000;
  * While running through Babel, excludes
  * stable V8 esnext options that are shipped in io.js.
  */
-gulp.task('scripts.server:build', function () {
+gulp.task('scripts.server:build', () => {
   let filter = gulpFilter('**/*.js', { restore: true });
 
   return gulp.src([paths.server.src, paths.index, paths.private], { base: './' })
@@ -88,7 +88,7 @@ gulp.task('scripts.server:build', function () {
 /**
  * Client scripts. Development workflow.
  */
-gulp.task('scripts.client:dev', function () {
+gulp.task('scripts.client:dev', () => {
   return gulp.src(paths.js.src)
     .pipe(plumber())
     .pipe(changed(paths.js.dest))
@@ -99,7 +99,7 @@ gulp.task('scripts.client:dev', function () {
 /**
  * Client scripts. Production build.
  */
-gulp.task('scripts.client:build', function () {
+gulp.task('scripts.client:build', () => {
   return gulp.src('')
     .pipe(plumber())
     .pipe(shell('jspm bundle-sfx --minify ' + paths.js.index + ' ' + paths.js.build));
@@ -108,7 +108,7 @@ gulp.task('scripts.client:build', function () {
 /**
  * Styles. Development workflow.
  */
-gulp.task('styles:dev', function () {
+gulp.task('styles:dev', () => {
   return gulp.src(paths.css.src)
     .pipe(plumber())
     .pipe(stylus({
@@ -122,7 +122,7 @@ gulp.task('styles:dev', function () {
 /**
  * Styles. Production build.
  */
-gulp.task('styles:build', function () {
+gulp.task('styles:build', () => {
   return gulp.src(paths.css.src)
     .pipe(plumber())
     .pipe(stylus({
@@ -137,7 +137,7 @@ gulp.task('styles:build', function () {
 /**
  * Images. Development workflow.
  */
-gulp.task('images:dev', function () {
+gulp.task('images:dev', () => {
   return gulp.src(paths.images.src)
     .pipe(plumber())
     .pipe(gulp.dest(paths.images.dest));
@@ -146,7 +146,7 @@ gulp.task('images:dev', function () {
 /**
  * Images. Production build.
  */
-gulp.task('images:build', function () {
+gulp.task('images:build', () => {
   return gulp.src(paths.images.src)
     .pipe(gulp.dest(paths.images.build));
 });
@@ -154,13 +154,13 @@ gulp.task('images:build', function () {
 /**
  * Root assets.
  */
-gulp.task('rootAssets:dev', function () {
+gulp.task('rootAssets:dev', () => {
   return gulp.src(paths.rootAssets.src)
     .pipe(plumber())
     .pipe(gulp.dest(paths.rootAssets.dest));
 });
 
-gulp.task('rootAssets:build', function () {
+gulp.task('rootAssets:build', () => {
   return gulp.src(paths.rootAssets.src)
     .pipe(gulp.dest(paths.rootAssets.build));
 });
@@ -168,17 +168,17 @@ gulp.task('rootAssets:build', function () {
 /**
  * Watchers.
  */
-gulp.task('watch', function () {
-  watch(paths.css.src, function () {
+gulp.task('watch', () => {
+  watch(paths.css.src, () => {
     gulp.start('styles:dev');
   });
-  watch(paths.js.src, function () {
+  watch(paths.js.src, () => {
     gulp.start('scripts.client:dev');
   });
-  watch(paths.images.src, function () {
+  watch(paths.images.src, () => {
     gulp.start('images:dev');
   });
-  watch(paths.rootAssets.src, function () {
+  watch(paths.rootAssets.src, () => {
     gulp.start('rootAssets');
   });
 }); 
@@ -186,21 +186,21 @@ gulp.task('watch', function () {
 /**
  * Cleaners.
  */
-gulp.task('clean', function (cb) {
+gulp.task('clean', callback => {
   del([
     paths.build + '/**/*',
     'public/scripts',
     'public/styles',
     'public/images'
-  ]).then(function () {
-    cb();
+  ]).then(() => {
+    callback();
   });
 });
 
 /**
  * Development helpers.
  */
-gulp.task('nodemon', function (cb) {
+gulp.task('nodemon', callback => {
   let called = false;
 
   return nodemon({
@@ -211,21 +211,21 @@ gulp.task('nodemon', function (cb) {
       'js': 'babel-node --blacklist ' + babelBlacklist.join(',')
     }
   })
-  .on('start', function () {
+  .on('start', () => {
     if (!called) {
-      setTimeout(cb, BROWSERSYNC_DELAY);
+      setTimeout(callback, BROWSERSYNC_DELAY);
       called = true;
     }
   })
-  .on('restart', function () {
-    setTimeout(function () {
+  .on('restart', () => {
+    setTimeout(() => {
       browserSync.reload({ stream: false });
     }, BROWSERSYNC_DELAY);
   });
 
 });
 
-gulp.task('sync', ['nodemon'], function () {
+gulp.task('sync', ['nodemon'], () => {
   browserSync.init({
     files: ['public/**/*'],
     proxy: 'localhost:' + (process.env.PORT || 3000),
@@ -238,13 +238,13 @@ gulp.task('sync', ['nodemon'], function () {
 /**
  * Default task.
  */
-gulp.task('default', function (callback) {
+gulp.task('default', callback => {
   runSequence('clean', ['scripts.client:dev', 'styles:dev', 'images:dev', 'rootAssets:dev'], 'watch', 'sync', callback);
 });
 
 /**
  * Build task.
  */
-gulp.task('build', function (callback) {
+gulp.task('build', callback => {
   runSequence('clean', ['scripts.server:build', 'scripts.client:build', 'styles:build', 'images:build', 'rootAssets:build'], callback);
 });
