@@ -50,15 +50,9 @@ const paths = {
   }
 };
 
-// do not transpile stable V8 ES.next features
-const babelBlacklist = [
-  'es6.blockScoping',
-  'es6.constants',
-  'es6.forOf',
-  'es6.templateLiterals',
-  'es6.arrowFunctions',
-  'es6.classes',
-  'regenerator'
+let babelPresets = [
+  'stage-2',
+  'es2015-node5'
 ];
 
 const BROWSERSYNC_DELAY = 1000;
@@ -79,7 +73,7 @@ gulp.task('scripts.server:build', () => {
     .pipe(plumber())
     .pipe(filter)
     .pipe(babel({
-      blacklist: babelBlacklist
+      presets: babelPresets
     }))
     .pipe(filter.restore)
     .pipe(gulp.dest(paths.server.build));
@@ -208,7 +202,7 @@ gulp.task('nodemon', callback => {
     ext: 'js jade',
     ignore: ['client/**', 'public/**'],
     execMap: {
-      'js': 'babel-node --blacklist ' + babelBlacklist.join(',')
+      'js': './node_modules/babel-cli/bin/babel-node.js --presets ' + babelPresets.join(',')
     }
   })
   .on('start', () => {

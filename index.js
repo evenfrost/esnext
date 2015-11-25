@@ -2,58 +2,68 @@
 
 import fs from 'fs';
 import path from 'path';
-import koa from 'koa';
+import Koa from 'koa';
 import serve from 'koa-static';
 import views from 'koa-views';
 import logger from 'koa-logger';
 import conditional from 'koa-conditional-get';
 import etag from 'koa-etag';
 import error from 'koa-error';
-import body from 'koa-body';
+import bodyParser from 'koa-bodyparser';
 import methodOverride from 'koa-methodoverride';
 import send from 'koa-send';
 import mount from 'koa-mount';
+import convert from 'koa-convert';
 
 const router = require('koa-router')();
-const app = koa();
+const app = new Koa();
 
 app
-  .use(body())
+  .use(bodyParser())
   .use(methodOverride())
   .use(logger())
-  .use(conditional())
-  .use(etag())
-  .use(error())
-  .use(serve(path.join(__dirname, 'public')))
-  .use(mount('/jspm_packages', serve(path.join(__dirname, 'jspm_packages'))));
+  .use(convert(conditional()))
+  .use(convert(etag()))
+  .use(convert(error()))
+  .use(convert(serve(path.join(__dirname, 'public'))))
+  .use(convert(mount('/jspm_packages', convert(serve(path.join(__dirname, 'jspm_packages'))))));
 
 // Jade templates
-app.use(views(path.join(__dirname, 'server/views'), {
+app.use(convert(views(path.join(__dirname, 'server/views'), {
   default: 'jade'
-}));
-
-// index route
-router.get('/', function* () {
-  yield this.render('index');
-});
+})));
 
 // serve jspm configuration file
-router.get('/config.js', function* (next) {
-  yield send(this, path.join(__dirname, 'jspm.config.js'));
+// router.get('/config.js', async function (ctx, next) {
+//   console.log(ctx.path);
+//   await send(ctx, path.join(__dirname, 'jspm.config.js'));
+// });
+
+app.use(async function (ctx, next) {
+  if (ctx.path === '/config.js') {
+    await send(ctx, path.join(__dirname, 'jspm.config.js'));
+  } else {
+    await next();
+  }
 });
+
+// index route
+router.get('/', convert(function *() {
+  yield this.render('index');
+}));
 
 // use router
 app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.use(function *(next) {
+app.use(convert(function *(next) {
   try {
     yield next;
   } catch (err) {
     this.app.emit('error', err, this);
   }
-});
+}));
 
 app.on('error', function (err) {
   console.error(err.stack);
