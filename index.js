@@ -41,9 +41,9 @@ app.use(async function (ctx, next) {
 });
 
 // index route
-router.get('/', async function (ctx) {
-  await ctx.render('index');
-});
+router.get('/', convert(function *() {
+  yield this.render('index');
+}));
 
 // use router
 app
@@ -58,8 +58,8 @@ app.use(async function (ctx, next) {
   }
 });
 
-app.on('error', function (err) {
-  if (err.status >= 500) {
+app.on('error', function (err, ctx) {
+  if (ctx.response.status >= 500) {
     console.error(err.stack);
   }
 });
