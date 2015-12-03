@@ -14,11 +14,13 @@ import methodOverride from 'koa-methodoverride';
 import send from 'koa-send';
 import mount from 'koa-mount';
 import convert from 'koa-convert';
+import helmet from 'koa-helmet';
 
 const router = require('koa-router')();
 const app = new Koa();
 
 app
+  .use(helmet())
   .use(bodyParser())
   .use(methodOverride())
   .use(logger())
