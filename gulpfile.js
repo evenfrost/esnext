@@ -182,7 +182,7 @@ gulp.task('watch', () => {
  */
 gulp.task('clean', callback => {
   del([
-    paths.build + '/**/*',
+    paths.build,
     'public/scripts',
     'public/styles',
     'public/images'
