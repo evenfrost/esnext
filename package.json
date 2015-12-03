@@ -22,8 +22,8 @@
     "koa-etag": "^2.1.0",
     "koa-logger": "^2.0.0",
     "koa-methodoverride": "^2.0.0",
-    "koa-mount": "^1.3.0",
-    "koa-router": "^6.x",
+    "koa-mount": "koajs/mount#next",
+    "koa-router": "^7.0.0",
     "koa-send": "^3.1.0",
     "koa-static": "^1.5.2",
     "koa-views": "^3.1.0"

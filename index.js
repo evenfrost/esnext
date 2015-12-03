@@ -26,47 +26,42 @@ app
   .use(convert(etag()))
   .use(convert(error()))
   .use(convert(serve(path.join(__dirname, 'public'))))
-  .use(convert(mount('/jspm_packages', convert(serve(path.join(__dirname, 'jspm_packages'))))));
+  .use(mount('/jspm_packages', convert(serve(path.join(__dirname, 'jspm_packages')))));
 
-// Jade templates
+// use Jade templates
 app.use(convert(views(path.join(__dirname, 'server/views'), {
   default: 'jade'
 })));
 
 // serve jspm configuration file
-// router.get('/config.js', async function (ctx, next) {
-//   console.log(ctx.path);
-//   await send(ctx, path.join(__dirname, 'jspm.config.js'));
-// });
-
 app.use(async function (ctx, next) {
-  if (ctx.path === '/config.js') {
-    await send(ctx, path.join(__dirname, 'jspm.config.js'));
-  } else {
-    await next();
-  }
+  ctx.path === '/config.js'
+    ? await send(ctx, 'jspm.config.js', { root: __dirname })
+    : await next();
 });
 
 // index route
-router.get('/', convert(function *() {
-  yield this.render('index');
-}));
+router.get('/', async function (ctx) {
+  await ctx.render('index');
+});
 
 // use router
 app
   .use(router.routes())
   .use(router.allowedMethods());
 
-app.use(convert(function *(next) {
+app.use(async function (ctx, next) {
   try {
-    yield next;
+    await next();
   } catch (err) {
     this.app.emit('error', err, this);
   }
-}));
+});
 
 app.on('error', function (err) {
-  console.error(err.stack);
+  if (err.status >= 500) {
+    console.error(err.stack);
+  }
 });
 
 app.listen(process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 3000));
