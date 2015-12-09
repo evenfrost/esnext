@@ -72,9 +72,7 @@ gulp.task('scripts.server:build', () => {
   return gulp.src([paths.server.src, paths.index, paths.private], { base: './' })
     .pipe(plumber())
     .pipe(filter)
-    .pipe(babel({
-      presets: babelPresets
-    }))
+    .pipe(babel())
     .pipe(filter.restore)
     .pipe(gulp.dest(paths.server.build));
 });
@@ -107,7 +105,7 @@ gulp.task('styles:dev', () => {
     .pipe(plumber())
     .pipe(stylus({
       use: [nib()],
-      import: ['nib'],
+      import: ['nib']
     }))
     .pipe(gulp.dest(paths.css.dest))
     .pipe(browserSync.stream());
@@ -121,7 +119,7 @@ gulp.task('styles:build', () => {
     .pipe(plumber())
     .pipe(stylus({
       use: [nib()],
-      import: ['nib'],
+      import: ['nib']
     }))
     .pipe(concatCss('bundle.css'))
     .pipe(minifyCss())
@@ -202,7 +200,7 @@ gulp.task('nodemon', callback => {
     ext: 'js jade',
     ignore: ['client/**', 'public/**'],
     execMap: {
-      'js': './node_modules/babel-cli/bin/babel-node.js --presets ' + babelPresets.join(',')
+      'js': './node_modules/babel-cli/bin/babel-node.js'
     }
   })
   .on('start', () => {
