@@ -1,6 +1,3 @@
-'use strict';
-
-import fs from 'fs';
 import path from 'path';
 import Koa from 'koa';
 import serve from 'koa-static';
@@ -52,18 +49,51 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
+// 404 error handler
+app.use(async function (ctx, next) {
+  if (ctx.status !== 404) await next();
+
+  // we need to explicitly set 404 here
+  // so that koa doesn't assign 200 on body
+  ctx.status = 404;
+
+  switch (ctx.accepts('html', 'json')) {
+    case 'html':
+      ctx.type = 'html';
+      ctx.body = '<p>Page Not Found.</p>';
+      break;
+    case 'json':
+      ctx.body = {
+        message: 'Not Found'
+      };
+      break;
+    default:
+      ctx.type = 'text';
+      ctx.body = 'Not Found';
+  }
+});
+
+// other error handler
 app.use(async function (ctx, next) {
   try {
     await next();
   } catch (err) {
-    this.app.emit('error', err, this);
+    ctx.status = err.status || 500;
+    ctx.type = 'html';
+    ctx.body = '<p>Something gone really wrong.</p>';
+
+    ctx.app.emit('error', err, ctx);
   }
 });
 
-app.on('error', function (err, ctx) {
-  if (ctx.response.status >= 500) {
-    console.error(err.stack);
-  }
+app.use(async function () {
+  throw new Error();
+});
+
+app.on('error', function (err) {
+  console.log(err);
 });
 
 app.listen(process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 3000));
+
+export { app, router };
