@@ -60,7 +60,7 @@ app.use(async function (ctx, next) {
   switch (ctx.accepts('html', 'json')) {
     case 'html':
       ctx.type = 'html';
-      ctx.body = '<p>Page Not Found.</p>';
+      ctx.body = '<p>Not Found</p>';
       break;
     case 'json':
       ctx.body = {
