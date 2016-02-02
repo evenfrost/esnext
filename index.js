@@ -33,14 +33,14 @@ app.use(convert(views(path.join(__dirname, 'server/views'), {
 })));
 
 // serve jspm configuration file
-app.use(async function (ctx, next) {
+app.use(async function handleJspmConfig(ctx, next) {
   ctx.path === '/config.js'
     ? await send(ctx, 'jspm.config.js', { root: __dirname })
     : await next();
 });
 
 // index route
-router.get('/', convert(function *() {
+router.get('/', convert(function* renderIndexPage() {
   yield this.render('index');
 }));
 
@@ -50,7 +50,7 @@ app
   .use(router.allowedMethods());
 
 // 404 error handler
-app.use(async function (ctx, next) {
+app.use(async function handleNotFoundError(ctx, next) {
   if (ctx.status !== 404) await next();
 
   // we need to explicitly set 404 here
@@ -73,8 +73,8 @@ app.use(async function (ctx, next) {
   }
 });
 
-// other error handler
-app.use(async function (ctx, next) {
+// common errors handler
+app.use(async function handleCommonError(ctx, next) {
   try {
     await next();
   } catch (err) {
@@ -86,13 +86,12 @@ app.use(async function (ctx, next) {
   }
 });
 
-app.use(async function () {
+app.use(async function throwError() {
   throw new Error();
 });
 
-app.on('error', function (err) {
-  console.log(err);
-});
+/* eslint no-console: 0 */
+app.on('error', err => console.log(err));
 
 app.listen(process.env.PORT || (process.env.NODE_ENV === 'production' ? 80 : 3000));
 

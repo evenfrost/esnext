@@ -1,0 +1,22 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "ecmaFeatures": {
+    "modules": true
+  },
+  "rules": {
+    "comma-dangle": [2, "never"],
+    "no-param-reassign": [2, { "props": false }],
+    "no-unused-expressions": [2, { "allowTernary": true }],
+    "one-var": [2, {
+        "uninitialized": "always",
+        "initialized": "never"
+    }],
+    "strict": 0
+  }
+}
