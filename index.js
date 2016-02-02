@@ -25,11 +25,11 @@ app
   .use(convert(etag()))
   .use(convert(error()))
   .use(convert(serve(path.join(__dirname, 'public'))))
-  .use(mount('/jspm_packages', convert(serve(path.join(__dirname, 'jspm_packages')))));
+  .use(convert(mount('/jspm_packages', convert(serve(path.join(__dirname, 'jspm_packages'))))));
 
 // use Jade templates
 app.use(convert(views(path.join(__dirname, 'server/views'), {
-  default: 'jade'
+  extension: 'jade'
 })));
 
 // serve jspm configuration file
