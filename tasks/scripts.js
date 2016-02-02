@@ -41,5 +41,5 @@ gulp.task('scripts.client:dev', () => {
 gulp.task('scripts.client:build', () => {
   return gulp.src('')
     .pipe(plumber())
-    .pipe(shell('jspm bundle-sfx --minify ' + paths.js.index + ' ' + paths.js.build));
+    .pipe(shell('node node_modules/jspm/jspm.js bundle-sfx --minify ' + paths.js.index + ' ' + paths.js.build));
 });
